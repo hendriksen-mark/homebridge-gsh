@@ -8,6 +8,7 @@ All notable changes to `homebridge-gsh` will be documented in this file. This pr
 
 - Updated dependent software packages. This included a major overhaul of the plugin to homebridge interface.
 - Make homebridge-gsh Homebridge 2.0 Ready
+- Updates to Heater/Cooler #4 tks to @noamcohen97
 
 ## v3.0.0 (2024-10-27)
 
