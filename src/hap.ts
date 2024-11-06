@@ -290,8 +290,6 @@ export class Hap {
     return this.hapClient.getAllServices().then((services) => {
       services = services.filter(x => this.types[x.type] !== undefined);
       this.log.debug(`Loaded ${services.length} accessories from Homebridge - pre filter`);
-      this.log.debug(`Accessory Filter: ${this.accessoryFilter}`);
-      this.log.debug(`accessoryFilterInverse: ${this.accessoryFilterInverse}`);
       if (this.accessoryFilterInverse) {
         services = services.filter(x => this.accessoryFilter.includes(x.serviceName));
       } else {

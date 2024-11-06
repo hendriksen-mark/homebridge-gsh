@@ -3,6 +3,7 @@ import { JwtHelperService } from '@auth0/angular-jwt'
 
 import { PluginConfig, PluginSchema, ServerEnvMetadata } from '@homebridge/plugin-ui-utils/dist/ui.interface'
 import { TranslateService } from './translate.service'
+import { SERVER_ADDRESS } from '../../../../src/settings'
 
 const jwtHelper = new JwtHelperService()
 
@@ -12,8 +13,8 @@ const jwtHelper = new JwtHelperService()
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private linkDomain = 'https://homebridge-gsh.iot.oz.nu'
-  private linkUrl = `${this.linkDomain}/link-account`
+  private linkDomain: string
+  private linkUrl: string
 
   private popup: Window
   private originCheckInterval
@@ -46,6 +47,9 @@ export class AppComponent implements OnInit, OnDestroy {
       window.homebridge.showSchemaForm()
     }
 
+    this.linkDomain = this.pluginConfig.betaServer ? `https://${SERVER_ADDRESS.beta}` : `https://${SERVER_ADDRESS.prod}`;
+    this.linkUrl = this.linkDomain + '/link-account';
+    console.log(this.linkUrl);
     this.parseToken()
     this.ready = true
 
@@ -61,6 +65,7 @@ export class AppComponent implements OnInit, OnDestroy {
   linkAccount() {
     window.addEventListener('message', this.windowMessageListener, false)
 
+    console.log('linkAccount', this.linkUrl);
     const w = 450
     const h = 700
     const y = window.top.outerHeight / 2 + window.top.screenY - (h / 2)

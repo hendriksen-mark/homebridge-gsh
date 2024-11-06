@@ -14,6 +14,7 @@ export interface PluginConfig extends PlatformConfig {
   accessoryFilterInverse?: boolean;
   accessorySerialFilter?: Array<string>;
   forceFahrenheit?: boolean;
+  betaServer?: boolean;
 }
 
 export interface Instance {
