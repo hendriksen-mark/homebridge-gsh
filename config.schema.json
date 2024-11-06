@@ -41,7 +41,7 @@
         "title": "Enable Debug Logging",
         "type": "boolean"
       },
-      "instanceBlacklist": {
+      "instanceDenylist": {
         "title": "Instance",
         "type": "array",
         "items": {
@@ -57,6 +57,10 @@
           "title": "Accessory Name",
           "type": "string"
         }
+      },
+      "accessoryFilterInverse": {
+        "title": "Invert Accessory Filter ( Change Accessory filter to only allow the names accessories, rather than deny them )",
+        "type": "boolean"
       },
       "accessorySerialFilter": {
         "title": "Accessory",
@@ -101,7 +105,7 @@
         },
         {
           "type": "help",
-          "helpvalue": "<h5>Instance Blacklist</h5><em class='primary-text'>Enter the usernames of any Homebridge instances or child bridges on your network that you don't want to be able to control from the Google Assistant.</em>"
+          "helpvalue": "<h5>Instance deny list</h5><em class='primary-text'>Enter the usernames of any Homebridge instances or child bridges on your network that you don't want to be able to control from the Google Assistant.</em>"
         },
         {
           "nodescription": true,
@@ -149,6 +153,11 @@
             }
           ]
         },
+        {
+          "type": "help",
+          "helpvalue": "<h5>Invert Accessory list</h5><em class='primary-text'>Rather than deny access to Accessory Filter names, allow only them.</em>"
+        },
+        "accessoryFilterInverse",
         {
           "type": "help",
           "helpvalue": "<em class='primary-text'>Enter the serial of the accessories you don't want to control from the Google Assistant.</em>"

@@ -88,6 +88,7 @@ export class Hap {
 
   instanceBlacklist: Array<string> = [];
   accessoryFilter: Array<string> = [];
+  accessoryFilterInverse: boolean;
   accessorySerialFilter: Array<string> = [];
   // deviceNameMap: Array<{ replace: string; with: string }> = [];
 
@@ -98,6 +99,7 @@ export class Hap {
     this.pin = pin;
 
     this.accessoryFilter = config.accessoryFilter || [];
+    this.accessoryFilterInverse = config.accessoryFilterInverse || false;
     this.accessorySerialFilter = config.accessorySerialFilter || [];
     this.instanceBlacklist = config.instanceBlacklist || [];
 
@@ -287,7 +289,14 @@ export class Hap {
   public async loadAccessories(): Promise<ServiceType[]> {
     return this.hapClient.getAllServices().then((services) => {
       services = services.filter(x => this.types[x.type] !== undefined);
-      services = services.filter(x => !this.accessoryFilter.includes(x.serviceName));
+      this.log.debug(`Loaded ${services.length} accessories from Homebridge - pre filter`);
+      this.log.debug(`Accessory Filter: ${this.accessoryFilter}`);
+      this.log.debug(`accessoryFilterInverse: ${this.accessoryFilterInverse}`);
+      if (this.accessoryFilterInverse) {
+        services = services.filter(x => this.accessoryFilter.includes(x.serviceName));
+      } else {
+        services = services.filter(x => !this.accessoryFilter.includes(x.serviceName));
+      }
       services = services.filter(x => !this.accessorySerialFilter.includes(x.accessoryInformation['Serial Number']));
       services = services.map(service => {
         return {
@@ -297,6 +306,7 @@ export class Hap {
             .digest('hex'),
         };
       });      // The embeded uniqueId formula is different with Hap Client
+      this.log.debug(`Loaded ${services.length} accessories from Homebridge - post filter`);
       return services;
     }).catch((e) => {
       if (e.response?.status === 401) {
