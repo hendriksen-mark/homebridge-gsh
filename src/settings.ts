@@ -14,4 +14,4 @@ export const PLUGIN_NAME = 'homebridge-gsh';
 export const SERVER_ADDRESS = {
   prod: 'homebridge-gsh.iot.oz.nu',
   beta: 'clone-gsh.homebridge.ca',
-}
+};

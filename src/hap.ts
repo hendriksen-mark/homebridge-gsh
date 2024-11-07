@@ -167,7 +167,16 @@ export class Hap {
     this.log.info(`Discovered ${this.services.length} accessories`);
     this.ready = true;
     await this.buildSyncResponse();
-    // await this.registerCharacteristicEventHandlers();
+    console.log('services', JSON.stringify(this.services, null, 2));
+    console.log('this.evTypes', this.evTypes);
+    const evServices: ServiceType[] = this.services.filter(x => this.evTypes.some(uuid => x.serviceCharacteristics.find(c => c.uuid === uuid)));
+    this.log.debug(`Monitoring ${evServices.length} services for changes`);
+
+    const monitor = await this.hapClient.monitorCharacteristics(evServices);
+    monitor.on('service-update', (services) => {
+      console.log('service-update', services);
+      this.reportStateSubject.next(services[0].uniqueId);
+    });
   }
 
   /**
@@ -304,7 +313,7 @@ export class Hap {
             .digest('hex'),
         };
       });      // The embeded uniqueId formula is different with Hap Client
-      this.log.debug(`Loaded ${services.length} accessories from Homebridge - post filter`);
+      this.log.debug(`Returned ${services.length} accessories from Homebridge - post filter`);
       return services;
     }).catch((e) => {
       if (e.response?.status === 401) {
