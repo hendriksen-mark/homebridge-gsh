@@ -352,6 +352,8 @@ const temperatureSensorTemp: ServiceType = {
     'username': '69:62:B7:AE:38:D4',
     'ipAddress': '192.168.1.11',
     'port': 51830,
+    connectionFailedCount: 0,
+    services: [],
   },
   'uniqueId': '49c24a777f09eddbe4579d8d9432a8f313d1d90d5c4a3ac8ff018be24469c7e2',
 };

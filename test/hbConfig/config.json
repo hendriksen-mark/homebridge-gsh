@@ -25,13 +25,14 @@
         },
         {
             "name": "Google Smart Home",
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imdvb2dsZS1vYXV0aDJ8MTA1ODUzNzk1MjkwNTA0NDIyNDg1IiwiaWF0IjoxNzMwODk5NjUzfQ.VkhuCSdeNRaIqjMrMHTcGD1tLn_CJv_UL4ubPVzJaDQ",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imdvb2dsZS1vYXV0aDJ8MTA1ODUzNzk1MjkwNTA0NDIyNDg1IiwiaWF0IjoxNzMwOTkxNTczfQ.IjMjg58QG2YwJu2V1_h1bD6HgqVxIAfWvz4CgThoUw8",
             "notice": "Keep your token a secret!",
             "debug": true,
             "accessoryFilter": [
                 "West Bedroom"
             ],
             "accessoryFilterInverse": true,
+            "betaServer": true,
             "platform": "google-smarthome"
         }
     ],
