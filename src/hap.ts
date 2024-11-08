@@ -390,6 +390,7 @@ export class Hap {
    * Close the HAP connection, used for testing
    */
   public async destroy() {
+    // console.log('destroy');
     if (this.startTimeout) {
       clearTimeout(this.startTimeout);
     }
@@ -400,7 +401,7 @@ export class Hap {
       clearTimeout(this.syncTimeout);
     }
     if (this.hapClient) {
-      // await this.hapClient.destroy();
+      this.hapClient.destroy();
     }
   }
 }

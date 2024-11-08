@@ -110,7 +110,6 @@ describe('process the SYNC intent', () => {
 
   afterAll(async () => {
     // eslint-disable-next-line no-console
-    console.log('destroy');
     await hap.destroy();
   });
 });
