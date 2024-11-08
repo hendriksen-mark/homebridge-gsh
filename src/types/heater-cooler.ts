@@ -40,7 +40,7 @@ export class HeaterCooler extends ghToHap implements ghToHap_t {
     let type = 'action.devices.types.THERMOSTAT';
 
     if (service.serviceCharacteristics.find(x => x.uuid === Characteristic.RotationSpeed)) {
-      type = 'action.devices.types.AC_UNIT';
+      // type = 'action.devices.types.AC_UNIT';
       traits.push('action.devices.traits.FanSpeed');
       attributes.supportsFanSpeedPercent = true;
     }

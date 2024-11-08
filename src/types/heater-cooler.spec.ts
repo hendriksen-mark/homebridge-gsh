@@ -87,7 +87,8 @@ describe('heaterCooler', () => {
     it('heaterCooler ac', async () => {
       const response: any = heaterCooler.sync(heaterCoolerAC);
       expect(response).toBeDefined();
-      expect(response.type).toBe('action.devices.types.AC_UNIT');
+      expect(response.type).not.toBe('action.devices.types.AC_UNIT');
+      expect(response.type).toBe('action.devices.types.THERMOSTAT');
       expect(response.traits).toContain('action.devices.traits.TemperatureSetting');
       expect(response.traits).toContain('action.devices.traits.OnOff');
       expect(response.traits).toContain('action.devices.traits.FanSpeed');
