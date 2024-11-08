@@ -37,7 +37,7 @@ export class HeaterCooler extends ghToHap implements ghToHap_t {
       queryOnlyOnOff: false,
     };
 
-    let type = 'action.devices.types.THERMOSTAT';
+    const type = 'action.devices.types.THERMOSTAT';
 
     if (service.serviceCharacteristics.find(x => x.uuid === Characteristic.RotationSpeed)) {
       // type = 'action.devices.types.AC_UNIT';
