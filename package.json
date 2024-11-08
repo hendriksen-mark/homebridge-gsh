@@ -5,6 +5,7 @@
   "private": false,
   "description": "Google Smart Home",
   "author": "oznu <dev@oz.nu>",
+  "homepage": "https://github.com/homebridge-plugins/homebridge-gsh/blob/latest/README.md",
   "license": "GPL-3.0",
   "repository": {
     "url": "git+https://github.com/homebridge-plugins/homebridge-gsh.git"
