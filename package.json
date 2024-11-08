@@ -2,11 +2,10 @@
   "name": "homebridge-gsh",
   "displayName": "Homebridge Google Smart Home",
   "version": "3.1.0",
-  "private": false,
   "description": "Google Smart Home",
-  "author": "oznu <dev@oz.nu>",
   "homepage": "https://github.com/homebridge-plugins/homebridge-gsh/blob/latest/README.md",
   "license": "GPL-3.0",
+  "author": "oznu <dev@oz.nu>",
   "repository": {
     "url": "git+https://github.com/homebridge-plugins/homebridge-gsh.git"
   },
