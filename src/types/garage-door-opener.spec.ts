@@ -30,8 +30,16 @@ describe('garageDoorOpener', () => {
   });
 
   describe('execute message', () => {
-    it('garageDoorOpener with OpenClose only', async () => {
-      const response = await garageDoorOpener.execute(garageDoorOpenerServiceOpenClose, commandOpenClose);
+    it('Open', async () => {
+      const response = await garageDoorOpener.execute(garageDoorOpenerServiceOpenClose, commandOpen);
+      expect(response).toBeDefined();
+      expect(response.ids).toBeDefined();
+      expect(response.status).toBe('SUCCESS');
+      // await sleep(10000)
+    });
+
+    it('Close', async () => {
+      const response = await garageDoorOpener.execute(garageDoorOpenerServiceOpenClose, commandClose);
       expect(response).toBeDefined();
       expect(response.ids).toBeDefined();
       expect(response.status).toBe('SUCCESS');
@@ -55,8 +63,31 @@ describe('garageDoorOpener', () => {
     it('garageDoorOpener with OpenClose only - Error', async () => {
       expect.assertions(1);
       garageDoorOpenerServiceOpenClose.serviceCharacteristics[0].setValue = setValueError;
-      expect(garageDoorOpener.execute(garageDoorOpenerServiceOpenClose, commandOpenClose)).rejects.toThrow('Error setting value');
+      expect(garageDoorOpener.execute(garageDoorOpenerServiceOpenClose, commandOpen)).rejects.toThrow('Error setting value');
       // await sleep(10000)
+    });
+  });
+
+  describe('2 factor authentication', () => {
+    it('twoFactorRequired should be set', async () => {
+      expect(garageDoorOpener.twoFactorRequired).toBeDefined();
+      expect(garageDoorOpener.twoFactorRequired).toBe(true);
+    });
+
+    it('Open - must request PIN', async () => {
+      const response = await garageDoorOpener.is2faRequired(commandOpen);
+      expect(response).toBeDefined();
+      expect(response).toBe(true);
+      // expect(response.ids).toBeDefined();
+      // expect(response.status).toBe('SUCCESS');
+    });
+
+    it('Close - does not request PIN', async () => {
+      const response = await garageDoorOpener.is2faRequired(commandClose);
+      expect(response).toBeDefined();
+      expect(response).toBe(false);
+      // expect(response.ids).toBeDefined();
+      // expect(response.status).toBe('SUCCESS');
     });
   });
 });
@@ -287,7 +318,7 @@ const commandOnOff = {
   ],
 };
 
-const commandOpenClose = {
+const commandOpen = {
   devices: [
     {
       customData: {
@@ -302,9 +333,34 @@ const commandOpenClose = {
   ],
   execution: [
     {
-      command: 'action.devices.commands.OpenClose',
-      params: {
-        on: true,
+      'command': 'action.devices.commands.OpenClose',
+      'params': {
+        'followUpToken': '1234567890',
+        'openPercent': 100,
+      },
+    },
+  ],
+};
+
+const commandClose = {
+  devices: [
+    {
+      customData: {
+        aid: 75,
+        iid: 8,
+        instanceIpAddress: '192.168.1.11',
+        instancePort: 46283,
+        instanceUsername: '1C:22:3D:E3:CF:34',
+      },
+      id: 'b9245954ec41632a14076df3bbb7336f756c17ca4b040914a593e14d652d5738',
+    },
+  ],
+  execution: [
+    {
+      'command': 'action.devices.commands.OpenClose',
+      'params': {
+        'followUpToken': '1234567890',
+        'openPercent': 0,
       },
     },
   ],

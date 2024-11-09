@@ -32,8 +32,16 @@ describe('securitySystem', () => {
   });
 
   describe('execute message', () => {
-    it('securitySystem with On/Off only', async () => {
-      const response = await securitySystem.execute(securitySystemServiceOnOff, commandArmDisarm);
+    it('Arm', async () => {
+      const response = await securitySystem.execute(securitySystemServiceOnOff, commandArm);
+      expect(response).toBeDefined();
+      expect(response.ids).toBeDefined();
+      expect(response.status).toBe('SUCCESS');
+      // await sleep(10000)
+    });
+
+    it('Disarm', async () => {
+      const response = await securitySystem.execute(securitySystemServiceOnOff, commandDisarm);
       expect(response).toBeDefined();
       expect(response.ids).toBeDefined();
       expect(response.status).toBe('SUCCESS');
@@ -57,8 +65,31 @@ describe('securitySystem', () => {
     it('securitySystem with On/Off only - Error', async () => {
       expect.assertions(1);
       securitySystemServiceOnOff.serviceCharacteristics[0].setValue = setValueError;
-      expect(securitySystem.execute(securitySystemServiceOnOff, commandArmDisarm)).rejects.toThrow('Error setting value');
+      expect(securitySystem.execute(securitySystemServiceOnOff, commandArm)).rejects.toThrow('Error setting value');
       // await sleep(10000)
+    });
+  });
+
+  describe('2 factor authentication', () => {
+    it('twoFactorRequired should be set', async () => {
+      expect(securitySystem.twoFactorRequired).toBeDefined();
+      expect(securitySystem.twoFactorRequired).toBe(true);
+    });
+
+    it('Arm - does not request PIN', async () => {
+      const response = await securitySystem.is2faRequired(commandArm);
+      expect(response).toBeDefined();
+      expect(response).toBe(false);
+      // expect(response.ids).toBeDefined();
+      // expect(response.status).toBe('SUCCESS');
+    });
+
+    it('Disarm - must request PIN', async () => {
+      const response = await securitySystem.is2faRequired(commandDisarm);
+      expect(response).toBeDefined();
+      expect(response).toBe(true);
+      // expect(response.ids).toBeDefined();
+      // expect(response.status).toBe('SUCCESS');
     });
   });
 });
@@ -550,7 +581,31 @@ const commandLockUnlock = {
   ],
 };
 
-const commandArmDisarm = {
+const commandArm = {
+  devices: [
+    {
+      customData: {
+        aid: 75,
+        iid: 8,
+        instanceIpAddress: '192.168.1.11',
+        instancePort: 46283,
+        instanceUsername: '1C:22:3D:E3:CF:34',
+      },
+      id: 'b9245954ec41632a14076df3bbb7336f756c17ca4b040914a593e14d652d5738',
+    },
+  ],
+  execution: [
+    {
+      command: 'action.devices.commands.ArmDisarm',
+      params: {
+        arm: true,
+        armLevel: 1,
+      },
+    },
+  ],
+};
+
+const commandDisarm = {
   devices: [
     {
       customData: {
@@ -569,6 +624,7 @@ const commandArmDisarm = {
       params: {
         arm: false,
         armLevel: 1,
+        cancel: true,
       },
     },
   ],

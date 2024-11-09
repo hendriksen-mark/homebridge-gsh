@@ -302,6 +302,17 @@ export class Hap {
         services = services.filter(x => !this.accessoryFilter.includes(x.serviceName));
       }
       services = services.filter(x => !this.accessorySerialFilter.includes(x.accessoryInformation['Serial Number']));
+      // if 2fa is forced for this service type, but a pin has not been set ignore the service
+      services = services.filter(x => {
+        if (this.types[x.type].twoFactorRequired && !this.config.twoFactorAuthPin && !this.config.disablePinCodeRequirement) {
+          this.log.warn(`Not registering ${x.serviceName} - Pin code has not been set and is required for secure ` +
+            `${x.type} accessory types. See https://git.io/JUQWX`);
+          return false;
+        } else {
+          return true;
+        }
+      });
+
       services = services.map(service => {
         return {
           ...service,

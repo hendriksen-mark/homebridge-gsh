@@ -31,8 +31,16 @@ describe('lockMechanism', () => {
   });
 
   describe('execute message', () => {
-    it('lockMechanism with On/Off only', async () => {
-      const response = await lockMechanism.execute(lockMechanismServiceOnOff, commandLockUnlock);
+    it('lock', async () => {
+      const response = await lockMechanism.execute(lockMechanismServiceOnOff, commandLock);
+      expect(response).toBeDefined();
+      expect(response.ids).toBeDefined();
+      expect(response.status).toBe('SUCCESS');
+      // await sleep(10000)
+    });
+
+    it('unlock', async () => {
+      const response = await lockMechanism.execute(lockMechanismServiceOnOff, commandUnlock);
       expect(response).toBeDefined();
       expect(response.ids).toBeDefined();
       expect(response.status).toBe('SUCCESS');
@@ -56,8 +64,31 @@ describe('lockMechanism', () => {
     it('lockMechanism with On/Off only - Error', async () => {
       expect.assertions(1);
       lockMechanismServiceOnOff.serviceCharacteristics[0].setValue = setValueError;
-      expect(lockMechanism.execute(lockMechanismServiceOnOff, commandLockUnlock)).rejects.toThrow('Error setting value');
+      expect(lockMechanism.execute(lockMechanismServiceOnOff, commandLock)).rejects.toThrow('Error setting value');
       // await sleep(10000)
+    });
+  });
+
+  describe('2 factor authentication', () => {
+    it('twoFactorRequired should be set', async () => {
+      expect(lockMechanism.twoFactorRequired).toBeDefined();
+      expect(lockMechanism.twoFactorRequired).toBe(true);
+    });
+
+    it('Lock - must not request PIN', async () => {
+      const response = await lockMechanism.is2faRequired(commandLock);
+      expect(response).toBeDefined();
+      expect(response).toBe(false);
+      // expect(response.ids).toBeDefined();
+      // expect(response.status).toBe('SUCCESS');
+    });
+
+    it('Unlock - must request PIN', async () => {
+      const response = await lockMechanism.is2faRequired(commandUnlock);
+      expect(response).toBeDefined();
+      expect(response).toBe(true);
+      // expect(response.ids).toBeDefined();
+      // expect(response.status).toBe('SUCCESS');
     });
   });
 });
@@ -505,7 +536,30 @@ const commandColorTemperature = {
   ],
 };
 
-const commandLockUnlock = {
+const commandLock = {
+  devices: [
+    {
+      customData: {
+        aid: 75,
+        iid: 8,
+        instanceIpAddress: '192.168.1.11',
+        instancePort: 46283,
+        instanceUsername: '1C:22:3D:E3:CF:34',
+      },
+      id: 'b9245954ec41632a14076df3bbb7336f756c17ca4b040914a593e14d652d5738',
+    },
+  ],
+  execution: [
+    {
+      command: 'action.devices.commands.LockUnlock',
+      params: {
+        lock: true,
+      },
+    },
+  ],
+};
+
+const commandUnlock = {
   devices: [
     {
       customData: {
